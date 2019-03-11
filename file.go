@@ -8,12 +8,16 @@ import (
 	"strings"
 )
 
+const tabToSpaces = "    "
+const logicIndentSize = 4
+
 type ClocFile struct {
-	Code     int32  `xml:"code,attr"`
-	Comments int32  `xml:"comment,attr"`
-	Blanks   int32  `xml:"blank,attr"`
-	Name     string `xml:"name,attr"`
-	Lang     string `xml:"language,attr"`
+	Code       int32   `xml:"code,attr"`
+	Comments   int32   `xml:"comment,attr"`
+	Blanks     int32   `xml:"blank,attr"`
+	Complexity float32 `xml:"complexity,attr"`
+	Name       string  `xml:"name,attr"`
+	Lang       string  `xml:"language,attr"`
 }
 
 type ClocFiles []ClocFile
@@ -54,12 +58,14 @@ func AnalyzeReader(filename string, language *Language, file io.Reader, opts *Cl
 	isFirstLine := true
 	isInComments := false
 	isInCommentsSame := false
+	var indents int32
 	buf := getByteSlice()
 	defer putByteSlice(buf)
 	scanner := bufio.NewScanner(file)
 	scanner.Buffer(buf, 1024*1024)
 	for scanner.Scan() {
 		lineOrg := scanner.Text()
+		lineOrg = strings.Replace(lineOrg, "\t", tabToSpaces, -1)
 		line := strings.TrimSpace(lineOrg)
 
 		if len(strings.TrimSpace(line)) == 0 {
@@ -162,6 +168,7 @@ func AnalyzeReader(filename string, language *Language, file io.Reader, opts *Cl
 			continue
 		}
 
+		indents += int32(len(lineOrg)) - int32(len(line))/logicIndentSize
 		clocFile.Code++
 		if opts.Debug {
 			fmt.Printf("[CODE,cd:%d,cm:%d,bk:%d,iscm:%v] %s\n",
@@ -169,5 +176,6 @@ func AnalyzeReader(filename string, language *Language, file io.Reader, opts *Cl
 		}
 	}
 
+	clocFile.Complexity = float32(indents) / float32(clocFile.Code)
 	return clocFile
 }

@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestAnalayzeFile4Python(t *testing.T) {
+func TestAnalyzeFile4Python(t *testing.T) {
 	tmpfile, err := ioutil.TempFile("", "tmp.py")
 	if err != nil {
 		t.Logf("ioutil.TempFile() error. err=[%v]", err)
@@ -41,7 +41,7 @@ class A:
 	}
 }
 
-func TestAnalayzeFile4PythonInvalid(t *testing.T) {
+func TestAnalyzeFile4PythonInvalid(t *testing.T) {
 	tmpfile, err := ioutil.TempFile("", "tmp.py")
 	if err != nil {
 		t.Logf("ioutil.TempFile() error. err=[%v]", err)
@@ -74,7 +74,7 @@ class A:
 	}
 }
 
-func TestAnalayzeFile4Go(t *testing.T) {
+func TestAnalyzeFile4Go(t *testing.T) {
 	tmpfile, err := ioutil.TempFile("", "tmp.go")
 	if err != nil {
 		t.Logf("ioutil.TempFile() error. err=[%v]", err)
@@ -106,9 +106,12 @@ func main() {
 	if clocFile.Code != 4 {
 		t.Errorf("invalid logic. code=%v", clocFile.Code)
 	}
+	if clocFile.Complexity != 1 {
+		t.Errorf("invalid logic. complexity=%v", clocFile.Complexity)
+	}
 }
 
-func TestAnalayzeFile4GoWithOnelineBlockComment(t *testing.T) {
+func TestAnalyzeFile4GoWithOnelineBlockComment(t *testing.T) {
 	t.SkipNow()
 	tmpfile, err := ioutil.TempFile("", "tmp.go")
 	if err != nil {
@@ -141,9 +144,12 @@ func main() {
 	if clocFile.Code != 6 {
 		t.Errorf("invalid logic. code=%v", clocFile.Code)
 	}
+	if clocFile.Complexity != 1.33 {
+		t.Errorf("invalid logic. complexity=%v", clocFile.Complexity)
+	}
 }
 
-func TestAnalayzeFile4GoWithCommentInnerBlockComment(t *testing.T) {
+func TestAnalyzeFile4GoWithCommentInnerBlockComment(t *testing.T) {
 	tmpfile, err := ioutil.TempFile("", "tmp.go")
 	if err != nil {
 		t.Logf("ioutil.TempFile() error. err=[%v]", err)
@@ -173,6 +179,9 @@ func main() {
 	}
 	if clocFile.Code != 5 {
 		t.Errorf("invalid logic. code=%v", clocFile.Code)
+	}
+	if clocFile.Complexity != 1.6 {
+		t.Errorf("invalid logic. complexity=%v", clocFile.Complexity)
 	}
 }
 
