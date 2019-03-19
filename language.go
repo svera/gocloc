@@ -536,7 +536,7 @@ func NewDefinedLanguages() *DefinedLanguages {
 			"TLA":                 NewLanguage("TLA", []string{"/*"}, [][]string{{"(*", "*)"}}),
 			"Tcl/Tk":              NewLanguage("Tcl/Tk", []string{"#"}, [][]string{{"", ""}}),
 			"TOML":                NewLanguage("TOML", []string{"#"}, [][]string{{"", ""}}),
-			"Twig":                NewLanguage("Twig", []string{}, [][]string{{"{#", "#}"}}),
+			"Twig":                NewLanguage("Twig", []string{}, [][]string{{"{#", "#}"}, {"<!--", "-->"}}),
 			"TypeScript":          NewLanguage("TypeScript", []string{"//"}, [][]string{{"/*", "*/"}}),
 			"Unity-Prefab":        NewLanguage("Unity-Prefab", []string{}, [][]string{{"", ""}}),
 			"MSBuild script":      NewLanguage("MSBuild script", []string{"<!--"}, [][]string{{"<!--", "-->"}}),
